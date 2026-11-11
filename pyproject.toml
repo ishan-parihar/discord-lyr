@@ -31,7 +31,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["build>=1.2", "pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.11",
+# ruff is PINNED to <0.16 because 0.16 enables rules this repo does not satisfy.
+# Measured 2026-11-11: ruff 0.15.5 reports "All checks passed!" and ruff 0.16.6
+# reports 29 errors (11 BLE001, 6 I001, 3 PIE790, 2 UP035, 2 S110, and 5 more),
+# none of which is a defect in the code. The pin is the fix, because the rules
+# are the repo's own choice and ruff 0.16 changed what the default rule set
+# means. `uv sync --extra dev` then `uv run ruff check .` is the documented
+# workflow in the README, and this bound is what keeps it honest.
+dev = ["build>=1.2", "pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.11,<0.16",
     "twine>=6.0", "pkginfo>=1.11"]
 
 
